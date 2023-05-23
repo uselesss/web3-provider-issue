@@ -42,16 +42,11 @@ class WalletConnectWeb3ConnectorV2 extends AbstractWeb3Connector {
 
                 web3modal.subscribeModal(() => {
                     account = getAccount()
-                    if (!account.address) return;
+                    if (!account.address || !account.connector) return;
                     const address = account.address.toLowerCase()
                     const verifiedChainId = verifyChainId(wagmiConfig.args.connectors[0].chains[0].id)
 
-                    console.log('config', wagmiConfig, web3modal, ethereumClient)
-                    console.log('connector 0:', wagmiConfig.args.connectors[0])
-                    wagmiConfig.args.connectors[1].getProvider().then(provider => console.log('connector 1:', provider))
-                    console.log('connector 1 options:', wagmiConfig.args.connectors[1].options.getProvider())
-
-                    wagmiConfig.args.connectors[1].getProvider().then(provider => {
+                    account.connector.getProvider().then(provider => {
                         console.log("Got provider", provider)
                         this.provider = provider
                         this.account = address
